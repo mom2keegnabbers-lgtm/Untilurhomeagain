@@ -1,0 +1,142 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Kindred design system — "Warm bento glass"
+ * Dark ink canvas with warm radial glows, frosted glass cards,
+ * Plus Jakarta Sans typography.
+ */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-brand: var(--brand);
+  --color-gold: var(--gold);
+  --color-good: var(--good);
+  --color-mist: var(--mist);
+  --font-sans: "Plus Jakarta Sans", system-ui, sans-serif;
+}
+
+:root {
+  --radius: 1.25rem;
+  --background: oklch(0.165 0.032 272);
+  --foreground: oklch(0.98 0.005 260);
+  --card: oklch(1 0 0 / 10%);
+  --card-foreground: oklch(0.98 0.005 260);
+  --popover: oklch(0.22 0.04 272);
+  --popover-foreground: oklch(0.98 0.005 260);
+  --primary: oklch(0.58 0.19 268);
+  --primary-foreground: oklch(0.98 0.005 260);
+  --secondary: oklch(1 0 0 / 12%);
+  --secondary-foreground: oklch(0.98 0.005 260);
+  --muted: oklch(1 0 0 / 8%);
+  --muted-foreground: oklch(0.75 0.03 265);
+  --accent: oklch(0.68 0.21 10);
+  --accent-foreground: oklch(0.98 0.005 260);
+  --destructive: oklch(0.65 0.2 25);
+  --destructive-foreground: oklch(0.98 0.005 260);
+  --border: oklch(1 0 0 / 15%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.58 0.19 268);
+  --brand: oklch(0.58 0.19 268);
+  --gold: oklch(0.84 0.13 80);
+  --good: oklch(0.78 0.15 160);
+  --mist: oklch(0.68 0.04 265);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    min-height: 100vh;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(60% 45% at 50% 0%, oklch(0.58 0.19 268 / 0.42), transparent 70%),
+      radial-gradient(55% 40% at 88% 22%, oklch(0.68 0.21 10 / 0.32), transparent 70%),
+      radial-gradient(50% 42% at 8% 46%, oklch(0.78 0.15 160 / 0.26), transparent 70%),
+      radial-gradient(60% 45% at 50% 100%, oklch(0.84 0.13 80 / 0.2), transparent 70%);
+  }
+}
+
+@layer components {
+  /* Frosted glass card — the core surface of the design */
+  .glass-card {
+    position: relative;
+    border-radius: var(--radius-3xl);
+    border: 1px solid var(--color-border);
+    background: oklch(1 0 0 / 10%);
+    backdrop-filter: blur(12px);
+  }
+
+  .glass-pill {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 9999px;
+    background: oklch(1 0 0 / 15%);
+    padding: 0.25rem 0.75rem;
+    font-size: 11px;
+    font-weight: 600;
+  }
+
+  .eyebrow {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: oklch(1 0 0 / 60%);
+  }
+
+  .glow-brand {
+    position: absolute;
+    border-radius: 9999px;
+    background: oklch(0.58 0.19 268 / 0.4);
+    filter: blur(40px);
+    pointer-events: none;
+  }
+
+  .glow-accent {
+    position: absolute;
+    border-radius: 9999px;
+    background: oklch(0.68 0.21 10 / 0.35);
+    filter: blur(40px);
+    pointer-events: none;
+  }
+}
