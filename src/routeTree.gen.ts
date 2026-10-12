@@ -24,6 +24,7 @@ import { Route as ApiNoticeRouteImport } from './routes/api/notice'
 import { Route as ChatThreadIdRouteImport } from './routes/chat.$threadId'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
 import { Route as ApiMembershipCheckoutRouteImport } from './routes/api/membership/checkout'
+import { Route as ApiMembershipRevenuecatRouteImport } from './routes/api/membership/revenuecat'
 import { Route as ApiPublicStripeWebhookRouteImport } from './routes/api/public/stripe-webhook'
 
 const IndexRoute = IndexRouteImport.update({
@@ -101,6 +102,11 @@ const ApiMembershipCheckoutRoute = ApiMembershipCheckoutRouteImport.update({
   path: '/api/membership/checkout',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiMembershipRevenuecatRoute = ApiMembershipRevenuecatRouteImport.update({
+  id: '/api/membership/revenuecat',
+  path: '/api/membership/revenuecat',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicStripeWebhookRoute = ApiPublicStripeWebhookRouteImport.update({
   id: '/api/public/stripe-webhook',
   path: '/api/public/stripe-webhook',
@@ -123,6 +129,7 @@ export interface FileRoutesByFullPath {
   '/chat/$threadId': typeof ChatThreadIdRoute
   '/invite/$token': typeof InviteTokenRoute
   '/api/membership/checkout': typeof ApiMembershipCheckoutRoute
+  '/api/membership/revenuecat': typeof ApiMembershipRevenuecatRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
 }
 export interface FileRoutesByTo {
@@ -141,6 +148,7 @@ export interface FileRoutesByTo {
   '/chat/$threadId': typeof ChatThreadIdRoute
   '/invite/$token': typeof InviteTokenRoute
   '/api/membership/checkout': typeof ApiMembershipCheckoutRoute
+  '/api/membership/revenuecat': typeof ApiMembershipRevenuecatRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
 }
 export interface FileRoutesById {
@@ -160,6 +168,7 @@ export interface FileRoutesById {
   '/chat/$threadId': typeof ChatThreadIdRoute
   '/invite/$token': typeof InviteTokenRoute
   '/api/membership/checkout': typeof ApiMembershipCheckoutRoute
+  '/api/membership/revenuecat': typeof ApiMembershipRevenuecatRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
 }
 export interface FileRouteTypes {
@@ -180,6 +189,7 @@ export interface FileRouteTypes {
     | '/chat/$threadId'
     | '/invite/$token'
     | '/api/membership/checkout'
+    | '/api/membership/revenuecat'
     | '/api/public/stripe-webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -198,6 +208,7 @@ export interface FileRouteTypes {
     | '/chat/$threadId'
     | '/invite/$token'
     | '/api/membership/checkout'
+    | '/api/membership/revenuecat'
     | '/api/public/stripe-webhook'
   id:
     | '__root__'
@@ -216,6 +227,7 @@ export interface FileRouteTypes {
     | '/chat/$threadId'
     | '/invite/$token'
     | '/api/membership/checkout'
+    | '/api/membership/revenuecat'
     | '/api/public/stripe-webhook'
   fileRoutesById: FileRoutesById
 }
@@ -234,6 +246,7 @@ export interface RootRouteChildren {
   ApiNoticeRoute: typeof ApiNoticeRoute
   InviteTokenRoute: typeof InviteTokenRoute
   ApiMembershipCheckoutRoute: typeof ApiMembershipCheckoutRoute
+  ApiMembershipRevenuecatRoute: typeof ApiMembershipRevenuecatRoute
   ApiPublicStripeWebhookRoute: typeof ApiPublicStripeWebhookRoute
 }
 
@@ -344,6 +357,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiMembershipCheckoutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/membership/revenuecat': {
+      id: '/api/membership/revenuecat'
+      path: '/api/membership/revenuecat'
+      fullPath: '/api/membership/revenuecat'
+      preLoaderRoute: typeof ApiMembershipRevenuecatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/stripe-webhook': {
       id: '/api/public/stripe-webhook'
       path: '/api/public/stripe-webhook'
@@ -379,6 +399,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiNoticeRoute: ApiNoticeRoute,
   InviteTokenRoute: InviteTokenRoute,
   ApiMembershipCheckoutRoute: ApiMembershipCheckoutRoute,
+  ApiMembershipRevenuecatRoute: ApiMembershipRevenuecatRoute,
   ApiPublicStripeWebhookRoute: ApiPublicStripeWebhookRoute,
 }
 export const routeTree = rootRouteImport

@@ -4,6 +4,7 @@ import { DefaultChatTransport } from "ai";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AppNav } from "@/components/AppNav";
 import { supabase } from "@/integrations/supabase/client";
+import { apiUrl } from "@/lib/api-url";
 
 export const Route = createFileRoute("/ask")({
   head: () => ({
@@ -38,7 +39,7 @@ function AskPage() {
   const transport = useMemo(
     () =>
       new DefaultChatTransport({
-        api: "/api/ask",
+        api: apiUrl("/api/ask"),
         body: () => ctx.current,
         headers: async (): Promise<Record<string, string>> => {
           const { data } = await supabase.auth.getSession();

@@ -30,3 +30,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Capacitor native platform projects (generated; recreate with `bunx cap add android && bunx cap sync`)
+android/
+ios/

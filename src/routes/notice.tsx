@@ -3,6 +3,7 @@ import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { useMemo, useRef, useState } from "react";
 import { AppNav } from "@/components/AppNav";
+import { apiUrl } from "@/lib/api-url";
 
 export const Route = createFileRoute("/notice")({
   head: () => ({
@@ -22,7 +23,7 @@ function NoticePage() {
   const [text, setText] = useState("");
   const [files, setFiles] = useState<FileList | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
-  const transport = useMemo(() => new DefaultChatTransport({ api: "/api/notice" }), []);
+  const transport = useMemo(() => new DefaultChatTransport({ api: apiUrl("/api/notice") }), []);
   const { messages, sendMessage, status, error, stop, setMessages } = useChat({ transport });
   const busy = status === "submitted" || status === "streaming";
   const answer = [...messages].reverse().find((m) => m.role === "assistant");

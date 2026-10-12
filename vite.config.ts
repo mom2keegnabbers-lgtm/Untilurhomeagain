@@ -11,5 +11,10 @@ export default defineConfig({
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
     server: { entry: "server" },
+    // Static SPA output for the Capacitor native build — Capacitor's webDir
+    // needs an index.html entry point, which the SSR build does not produce.
+    // Enabled only when CAPACITOR_BUILD=1 (see "build:capacitor" in package.json)
+    // so the default web build keeps full SSR via Nitro.
+    ...(process.env['CAPACITOR_BUILD'] === "1" ? { spa: { enabled: true } } : {}),
   },
 });

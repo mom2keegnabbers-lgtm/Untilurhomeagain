@@ -5,6 +5,9 @@ import { AppNav } from "@/components/AppNav";
 import { useAuth } from "@/lib/use-auth";
 import { usePlan } from "@/lib/use-membership";
 import { LIFETIME_PRICE_LABEL, PLAN_COMPARISON } from "@/lib/membership";
+import { apiUrl } from "@/lib/api-url";
+import { isNativeApp } from "@/lib/platform";
+import { purchaseLifetimeNative } from "@/lib/billing";
 
 type Search = { joined?: boolean; cancelled?: boolean };
 
@@ -37,7 +40,7 @@ export const Route = createFileRoute("/membership")({
 
 async function startCheckout(): Promise<{ url?: string; error?: string }> {
   const { data } = await supabase.auth.getSession();
-  const res = await fetch("/api/membership/checkout", {
+  const res = await fetch(apiUrl("/api/membership/checkout"), {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -57,6 +60,9 @@ function MembershipPage() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [checks, setChecks] = useState(0);
+  // Native builds (Android/iOS) must use Google Play Billing via RevenueCat —
+  // Play policy forbids the Stripe checkout inside the app, so it stays web-only.
+  const native = isNativeApp();
 
   // Returning from Stripe does NOT unlock anything — we re-read the saved purchase
   // a few times while Stripe's confirmation reaches our server.
@@ -76,6 +82,16 @@ function MembershipPage() {
   async function unlock() {
     setError(null);
     setBusy(true);
+    if (native) {
+      const res = await purchaseLifetimeNative();
+      setBusy(false);
+      if (!res.ok) {
+        if (res.cancelled) return; // user dismissed the Play billing sheet
+        return setError(res.error);
+      }
+      await refresh(); // pick up the newly granted Lifetime access
+      return;
+    }
     const res = await startCheckout();
     setBusy(false);
     if (res.error) return setError(res.error);
@@ -146,7 +162,13 @@ function MembershipPage() {
             disabled={busy || loading}
             className="mt-4 w-full rounded-full bg-primary py-3 text-[14px] font-bold text-primary-foreground disabled:opacity-40"
           >
-            {busy ? "Opening secure payment…" : `Unlock Lifetime Access — ${LIFETIME_PRICE_LABEL}`}
+            {busy
+              ? native
+                ? "Opening Google Play…"
+                : "Opening secure payment…"
+              : native
+                ? `Unlock Lifetime Access — ${LIFETIME_PRICE_LABEL} via Google Play`
+                : `Unlock Lifetime Access — ${LIFETIME_PRICE_LABEL}`}
           </button>
         ) : (
           <>
@@ -207,8 +229,10 @@ function MembershipPage() {
         </p>
         <p className="eyebrow mt-4">Privacy</p>
         <p className="mt-2 text-[12px] leading-relaxed text-muted-foreground">
-          Payments are handled by Stripe. Kindred never sees or stores your card number. We save only that your account
-          has Lifetime access. Your family chats are visible only to the people in them, and we never sell your information.
+          {native
+            ? "Payments are handled securely through Google Play. Kindred never sees or stores your card number. We save only that your account has Lifetime access."
+            : "Payments are handled by Stripe. Kindred never sees or stores your card number. We save only that your account has Lifetime access."}{" "}
+          Your family chats are visible only to the people in them, and we never sell your information.
         </p>
         <p className="eyebrow mt-4">Terms</p>
         <p className="mt-2 text-[12px] leading-relaxed text-muted-foreground">
